@@ -75,9 +75,9 @@ Engine_Drone : CroneEngine {
 		];
 
 		// initialize control buses
-		freqMasterIn.set(85);
-		freq1In.set(0);
-		freq2In.set(0);
+		freqMasterIn.set(0);
+		freq1In.set(100);
+		freq2In.set(100);
 		spread1In.set(1);
 		spread2In.set(0);
 		cutoffIn.set(20000);
@@ -211,11 +211,13 @@ Engine_Drone : CroneEngine {
 			Out.ar(outBus, sig);
 		}).add;
 
-		SynthDef(\wavefolder, {|preGain=1, inBus, outBus|
-			var sig, index;
-
+		SynthDef(\wavefolder, {|preGainBus, inBus, outBus|
+			var sig, index, preGain;
+      
+      preGain = In.kr(preGainBus, 1);
+      
 			sig = In.ar(inBus, 2);
-			sig = sig * (0.15+Lag.kr(preGain*1.82,0.18));
+			sig = sig * (0.15+Lag.kr(preGain*1.82,1));
 			sig= Shaper.ar(wavefolderBuf, sig / wavefolderScale);
 
 			Out.ar(outBus, sig *5);
@@ -259,7 +261,7 @@ Engine_Drone : CroneEngine {
 		s.sync;
 		mixer1 = Synth.tail(audioGrp, \mixer, [in1Bus: mixer1In, in2Bus: mixer2In, in1Level: level1In.asMap, in2Level: level2In.asMap, outBus: mixerOut]);
 		s.sync;
-		wavefolder = Synth.tail(audioGrp, \wavefolder, [inBus: mixerOut, outBus: wavefolderOut, preGain: wavefolderAmtIn.asMap]);
+		wavefolder = Synth.tail(audioGrp, \wavefolder, [inBus: mixerOut, outBus: wavefolderOut, preGainBus: wavefolderAmtIn]);
 		s.sync;
 		filter1 = Synth.tail(audioGrp, \filter, [cutoff: cutoffIn.asMap, res: resonanceIn.asMap, inBus: wavefolderOut, outBus: filterOut, satAmt: grungeIn.asMap]);
 		s.sync;

@@ -36,17 +36,17 @@ end
 
 function init()
   -- master pitch
-  params:add_control("master pitch", "master pitch", controlspec.new(20, 2000, 'exp', 0, 100, 'hz'))
-  params:set_action("master pitch", function(x)
-    engine.freqMasterIn(x)
-  end)
+  --params:add_control("master pitch", "master pitch", controlspec.new(20, 2000, 'exp', 0, 100, 'hz'))
+  --params:set_action("master pitch", function(x)
+  --  engine.freqMasterIn(x)
+  --end)
   
   -- osc 1
   params:add_control("osc 1 level", "osc 1 level", controlspec.new(0, 2, 'lin', 0, 1))
   params:set_action("osc 1 level", function(x)
     engine.level1In(x)
   end)
-  params:add_control("osc 1 pitch", "osc 1 pitch", controlspec.new(20, 2000, 'exp', 0, 80, 'hz'))
+  params:add_control("osc 1 pitch", "osc 1 pitch", controlspec.new(20, 2000, 'exp', 0, 100, 'hz'))
   params:set_action("osc 1 pitch", function(x)
     engine.freq1In(x)
   end)
@@ -60,7 +60,7 @@ function init()
   params:set_action("osc 2 level", function(x)
     engine.level2In(x)
   end)
-  params:add_control("osc 2 pitch", "osc 2 pitch", controlspec.new(20, 2000, 'exp', 0, 80, 'hz'))
+  params:add_control("osc 2 pitch", "osc 2 pitch", controlspec.new(20, 2000, 'exp', 0, 100, 'hz'))
   params:set_action("osc 2 pitch", function(x)
     engine.freq2In(x)
   end)
@@ -119,7 +119,7 @@ function enc(n, d)
     end
   else
     if n == 1 then
-      params:delta("master pitch", d*pitchMult)
+      params:delta("osc 1 pitch", d*pitchMult)
     elseif n == 2 then
       --params:delta("decay", d)
     elseif n == 3 then
